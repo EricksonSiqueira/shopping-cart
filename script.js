@@ -83,6 +83,7 @@ function generateLoadingScreen(elementToAppend, text) {
 
 async function generateProductList(prodctName) {
   const itemsSections = document.querySelector('.items');
+  itemsSections.innerHTML = '';
   generateLoadingScreen(itemsSections, 'Carregando...');
   const productList = await getProductList(prodctName);
   const prodctListResults = productList.results;
@@ -170,6 +171,10 @@ function getSavedCart() {
   }
   getSavedCartValue();
 }
+function getInputSearchValue () {
+  const searchInput = document.querySelector('#search-input');
+  return searchInput.value;
+}
 
 function creatBodyListeners() {
   document.body.addEventListener('click', async (event) => {
@@ -186,6 +191,9 @@ function creatBodyListeners() {
       cartItmsOl.innerHTML = '';
       saveCart();
       attTotalPrice(0);
+    }
+    if (element.classList.contains('search-button')) {
+      generateProductList(getInputSearchValue());
     }
   });
 }
