@@ -11,7 +11,6 @@ function removeItemPrice(value) {
   const localValueOperation = localValue - value;
   const newLocalValueText = localValueOperation === 0 ? 0 : localValueOperation.toFixed(2);
   const newLocalValue = parseFloat(newLocalValueText);
-  console.log(newLocalValue);
   attTotalPrice(newLocalValue);
 }
 
@@ -183,7 +182,6 @@ function creatBodyListeners() {
       const productElement = element.parentElement;
       const productId = getSkuFromProductItem(productElement);
       await addItemToCart(productId);
-      console.log('aqui');
       saveCart();
     }
     if (element.classList.contains('empty-cart')) {
