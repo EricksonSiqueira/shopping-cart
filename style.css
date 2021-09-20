@@ -9,17 +9,23 @@
 
 .search-tab {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   height: 60px;
   margin-bottom: 10px;
   width: 100%;
+  margin-left: 4%;
 }
 #search-input {
   margin-top: 5px;
   height: 35px;
   font-size: 20px;
-  width: 90%;
+  width: 85%;
+}
+#search-button {
+  height: 40px;
+  margin-top: 3px;
+  width: 7%;
 }
 #search-input::placeholder{
   font-size: 20px;
