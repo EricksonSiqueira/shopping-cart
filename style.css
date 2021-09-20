@@ -21,6 +21,9 @@
   font-size: 20px;
   color: rgb(182, 181, 181);
 }
+#search-input {
+  margin-right: 2px;
+}
 
 .items {
   display: flex;
