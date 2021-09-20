@@ -43,7 +43,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -67,12 +67,6 @@ async function getProductList(productName) {
   return productListConverted;
 }
 
-function makeObjForProductItem(product) {
-  const { id, title, thumbnail } = product;
-  const productObj = { sku: id, name: title, image: thumbnail };
-  return productObj;
-}
-
 function generateLoadingScreen(elementToAppend, text) {
   const loadingP = document.createElement('p');
   loadingP.innerText = text;
@@ -88,8 +82,7 @@ async function generateProductList(prodctName) {
   const prodctListResults = productList.results;
   itemsSections.innerHTML = '';
   prodctListResults.forEach((product) => {
-    const objForProductItem = makeObjForProductItem(product);
-    const productItemElement = createProductItemElement(objForProductItem);
+    const productItemElement = createProductItemElement(product);
     itemsSections.appendChild(productItemElement);
   });
 }
