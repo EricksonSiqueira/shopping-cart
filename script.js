@@ -11,7 +11,6 @@ function removeItemPrice(value) {
   const localValueOperation = localValue - value;
   const newLocalValueText = localValueOperation === 0 ? 0 : localValueOperation.toFixed(2);
   const newLocalValue = parseFloat(newLocalValueText);
-  console.log(newLocalValue);
   attTotalPrice(newLocalValue);
 }
 
@@ -44,14 +43,15 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
+async function createProductItemElement({ id: sku, title: name, price}) {
   const section = document.createElement('section');
+  const product = await getSingleProduct(sku);
+  const imagemHD = product.pictures[0].url;
   section.className = 'item';
-
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  section.appendChild(createProductImageElement(imagemHD));
+  section.appendChild(createCustomElement('button', 'item__add', `R$${price}`));
   
   return section;
 }
@@ -68,12 +68,6 @@ async function getProductList(productName) {
   return productListConverted;
 }
 
-function makeObjForProductItem(product) {
-  const { id, title, thumbnail } = product;
-  const productObj = { sku: id, name: title, image: thumbnail };
-  return productObj;
-}
-
 function generateLoadingScreen(elementToAppend, text) {
   const loadingP = document.createElement('p');
   loadingP.innerText = text;
@@ -83,21 +77,15 @@ function generateLoadingScreen(elementToAppend, text) {
 
 async function generateProductList(prodctName) {
   const itemsSections = document.querySelector('.items');
+  itemsSections.innerHTML = '';
   generateLoadingScreen(itemsSections, 'Carregando...');
   const productList = await getProductList(prodctName);
   const prodctListResults = productList.results;
   itemsSections.innerHTML = '';
-  prodctListResults.forEach((product) => {
-    const objForProductItem = makeObjForProductItem(product);
-    const productItemElement = createProductItemElement(objForProductItem);
+  prodctListResults.forEach(async (product) => {
+    const productItemElement = await createProductItemElement(product);
     itemsSections.appendChild(productItemElement);
   });
-}
-
-function makeObjForCartItem(product) {
-  const { id, title, price } = product;
-  const productObj = { sku: id, name: title, salePrice: price };
-  return productObj;
 }
 
 async function getSingleProduct(id) {
@@ -132,7 +120,7 @@ function cartItemClickListener(event) {
   saveCart();
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
@@ -142,9 +130,8 @@ function createCartItemElement({ sku, name, salePrice }) {
 async function addItemToCart(id) {
   const productPromise = await getSingleProduct(id);
   const cartItemsSection = document.querySelector(cartItems);
-  const cartProductObj = makeObjForCartItem(productPromise);
-  addItemPrice(cartProductObj.salePrice);
-  const cartItemElement = createCartItemElement(cartProductObj);
+  addItemPrice(productPromise.price);
+  const cartItemElement = createCartItemElement(productPromise);
   cartItemsSection.appendChild(cartItemElement);
 }
 
@@ -170,6 +157,10 @@ function getSavedCart() {
   }
   getSavedCartValue();
 }
+function getInputSearchValue () {
+  const searchInput = document.querySelector('#search-input');
+  return searchInput.value;
+}
 
 function creatBodyListeners() {
   document.body.addEventListener('click', async (event) => {
@@ -178,7 +169,6 @@ function creatBodyListeners() {
       const productElement = element.parentElement;
       const productId = getSkuFromProductItem(productElement);
       await addItemToCart(productId);
-      console.log('aqui');
       saveCart();
     }
     if (element.classList.contains('empty-cart')) {
@@ -186,6 +176,9 @@ function creatBodyListeners() {
       cartItmsOl.innerHTML = '';
       saveCart();
       attTotalPrice(0);
+    }
+    if (element.classList.contains('search-button')) {
+      generateProductList(getInputSearchValue());
     }
   });
 }

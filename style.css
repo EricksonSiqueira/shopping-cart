@@ -1,7 +1,28 @@
+* {
+  color: rgb(50, 50, 50);
+}
 .container {
   display: flex;
   justify-content: space-around;
   width: 100%;
+}
+
+.search-tab {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 60px;
+  margin-bottom: 10px;
+  width: 80%;
+  margin-left: 4%;
+}
+
+#search-input::placeholder{
+  font-size: 20px;
+  color: rgb(182, 181, 181);
+}
+#search-input {
+  margin-right: 2px;
 }
 
 .items {
