@@ -43,16 +43,22 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+function convertStringToBrl(value) {
+  return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+}
+
 async function createProductItemElement({ id: sku, title: name, price}) {
   const section = document.createElement('section');
   const product = await getSingleProduct(sku);
   const imagemHD = product.pictures[0].url;
   section.className = 'item';
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(imagemHD));
-  section.appendChild(createCustomElement('button', 'item__add', `R$${price}`));
-  
+  const sectionText = createCustomElement('div', 'item_content', '');
+  section.appendChild(sectionText);
+  sectionText.appendChild(createCustomElement('span', 'item__sku', sku));
+  sectionText.appendChild(createProductImageElement(imagemHD));
+  sectionText.appendChild(createCustomElement('span', 'item__title', name));
+  sectionText.appendChild(createCustomElement('div', 'item_price', `Por R$${convertStringToBrl(price)}`));
+  section.appendChild(createCustomElement('button', 'item__add', `Adicionar ao carrinho!`));
   return section;
 }
 
