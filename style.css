@@ -92,6 +92,11 @@
   margin-top: 12px;
   margin-bottom: 20px;
   box-shadow: 4px 4px 5px 1px rgba(0, 0, 0, 0.24);
+  transition: 0.3s;
+}
+
+.item .item__add:hover {
+ background-color: rgb(11, 97, 11);
 }
 
 .cart {
