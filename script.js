@@ -57,7 +57,7 @@ async function createProductItemElement({ id: sku, title: name, price}) {
   sectionText.appendChild(createCustomElement('span', 'item__sku', sku));
   sectionText.appendChild(createProductImageElement(imagemHD));
   sectionText.appendChild(createCustomElement('span', 'item__title', name));
-  sectionText.appendChild(createCustomElement('div', 'item_price', `Por R$${convertStringToBrl(price)}`));
+  sectionText.appendChild(createCustomElement('div', 'item_price', `Por ${convertStringToBrl(price)}`));
   section.appendChild(createCustomElement('button', 'item__add', `Adicionar ao carrinho!`));
   return section;
 }
@@ -119,7 +119,7 @@ function cartItemClickListener(event) {
   // coloque seu código aqui
   const element = event.target;
   const elementInnerText = element.innerText;
-  const elementPriceText = elementInnerText.split('PRICE: $')[1];
+  const elementPriceText = elementInnerText.split('PREÇO: $')[1];
   const elementPriceValue = parseFloat(elementPriceText);
   removeItemPrice(elementPriceValue);
   element.remove();
@@ -189,8 +189,21 @@ function creatBodyListeners() {
   });
 }
 
+function creatSkeletonDivs() {
+
+}
+
+function creatSkeletonAnimation() {
+  const itemsSection = document.querySelector('.items');
+  for(let i = 0; i < 50; i += 1){
+    const item = document.createElement('section');
+    itemsSection.appendChild(item);
+    li.classList.add('items', 'skeleton');
+  }
+} 
+
 window.onload = async () => {
-  generateProductList('computador');
+  generateProductList('desktop');
   creatBodyListeners();
   await getSavedCart();
 };
