@@ -3,7 +3,7 @@ const cartItems = '.cart__items';
 function attTotalPrice(value) {
   const totalPriceSpan = document.querySelector('.total-price');
   localStorage.setItem('cartTotalPrice', JSON.stringify(value));
-  totalPriceSpan.innerText = value;
+  totalPriceSpan.innerText = convertStringToBrl(value);
 }
 
 function removeItemPrice(value) {
