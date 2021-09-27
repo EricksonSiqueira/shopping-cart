@@ -115,6 +115,14 @@
   padding: 12px;
 }
 
+.total-price{
+  color: orangered;
+}
+.total-price-txt, .total-price {
+  font-weight: bold;
+  font-size: 18px;
+}
+
 .skeleton {
   opacity: .7;
   animation: skeleton-loading 1s linear infinite alternate;
