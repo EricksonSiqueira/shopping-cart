@@ -3,7 +3,7 @@ const cartItems = '.cart__items';
 function attTotalPrice(value) {
   const totalPriceSpan = document.querySelector('.total-price');
   localStorage.setItem('cartTotalPrice', JSON.stringify(value));
-  totalPriceSpan.innerText = value;
+  totalPriceSpan.innerText = convertStringToBrl(value);
 }
 
 function removeItemPrice(value) {
@@ -129,7 +129,7 @@ function cartItemClickListener(event) {
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.innerText = `${name} | PREÇO: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
