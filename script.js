@@ -203,7 +203,7 @@ function creatSkeletonAnimation() {
 } 
 
 window.onload = async () => {
-  generateProductList('computador');
+  generateProductList('desktop');
   creatBodyListeners();
   await getSavedCart();
 };
