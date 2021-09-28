@@ -47,19 +47,20 @@ function convertStringToBrl(value) {
   return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
 }
 
-async function createProductItemElement({ id: sku, title: name, price}) {
-  const section = document.createElement('section');
+async function createProductItemElement({ id: sku, title: name, price}, item) {
   const product = await getSingleProduct(sku);
   const imagemHD = product.pictures[0].url;
-  section.className = 'item';
+  item.classList = '';
+  item.innerHTML = '';
+  item.className = 'item';
   const sectionText = createCustomElement('div', 'item_content', '');
-  section.appendChild(sectionText);
+  item.appendChild(sectionText);
   sectionText.appendChild(createCustomElement('span', 'item__sku', sku));
   sectionText.appendChild(createProductImageElement(imagemHD));
   sectionText.appendChild(createCustomElement('span', 'item__title', name));
   sectionText.appendChild(createCustomElement('div', 'item_price', `Por ${convertStringToBrl(price)}`));
-  section.appendChild(createCustomElement('button', 'item__add', `Adicionar ao carrinho!`));
-  return section;
+  item.appendChild(createCustomElement('button', 'item__add', `Adicionar ao carrinho!`));
+  return item;
 }
 
 function getSkuFromProductItem(item) {
@@ -80,16 +81,37 @@ function generateLoadingScreen(elementToAppend, text) {
   loadingP.classList.add('loading');
   elementToAppend.appendChild(loadingP);
 }
+function creatSkeletonAnimation() {
+  const itemsSection = document.querySelector('.items');
+  for(let i = 0; i < 50; i += 1){
+    const divItem = document.createElement('div');
+    divItem.classList.add('item-skeleton', 'skeleton');
+    itemsSection.appendChild(divItem);
+
+    const divImg = document.createElement('div');
+    divImg.classList.add('img-cart-skeleton', 'skeleton');
+    divItem.appendChild(divImg);
+
+    for (let j = 0; j < 4; j += 1) {
+      const divTxt = document.createElement('div');
+      divTxt.classList.add('item-txt-skeleton', 'skeleton-text', 'skeleton');
+      divItem.appendChild(divTxt);
+    }
+  }
+} 
+async function insertAfter(newNode, referenceNode) {
+  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
 
 async function generateProductList(prodctName) {
   const itemsSections = document.querySelector('.items');
+  const childs = itemsSections.childNodes;
   itemsSections.innerHTML = '';
-  generateLoadingScreen(itemsSections, 'Carregando...');
+  creatSkeletonAnimation();
   const productList = await getProductList(prodctName);
   const prodctListResults = productList.results;
-  itemsSections.innerHTML = '';
-  prodctListResults.forEach(async (product) => {
-    const productItemElement = await createProductItemElement(product);
+  prodctListResults.forEach(async (product, index) => {
+    const productItemElement = await createProductItemElement(product, childs[index]);
     itemsSections.appendChild(productItemElement);
   });
 }
@@ -193,14 +215,6 @@ function creatSkeletonDivs() {
 
 }
 
-function creatSkeletonAnimation() {
-  const itemsSection = document.querySelector('.items');
-  for(let i = 0; i < 50; i += 1){
-    const item = document.createElement('section');
-    itemsSection.appendChild(item);
-    li.classList.add('items', 'skeleton');
-  }
-} 
 
 window.onload = async () => {
   generateProductList('desktop');
